@@ -84,7 +84,8 @@ class CMakeBuild(build_ext):
                 '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(
                     cfg.upper(), extdir),
                 '-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_{}={}'.format(
-                    cfg.upper(), self.build_temp)
+                    cfg.upper(), self.build_temp),
+                '-DPYTHON_EXECUTABLE_HINT={}'.format(sys.executable)
             ]
 
             # We can handle some platform-specific settings at our discretion
