@@ -47,7 +47,7 @@ fi
 sed -i '/new_soname = src_name/a \    if any(x in src_name for x in ["libmkl_avx2", "libmkl_avx512"]): new_soname = src_name' \
     $($(cat $(which auditwheel) | head -1 | awk -F'!' '{print $2}') -c "from auditwheel import repair;print(repair.__file__)")
 ${PY_EXE} -c 'import site; print("*".join(site.getsitepackages()))' > /tmp/ptmp
-sed -i '/rpath_set\[rpath\]/a \    import site\n    for x in set(["../lib" + p.split("lib")[-1] for p in open("/tmp/ptmp").read().split("*")]):\n        print(x, rpath, rpath.replace("../..", x))\n        rpath_set[rpath.replace("../..", x)] = ""' \
+sed -i '/rpath_set\[rpath\]/a \    import site\n    for x in set(["../lib" + p.split("lib")[-1] for p in open("/tmp/ptmp").read().strip().split("*")]): rpath_set[rpath.replace("../..", x)] = ""' \
     $($(cat $(which auditwheel) | head -1 | awk -F'!' '{print $2}') -c "from auditwheel import repair;print(repair.__file__)")
 
 /opt/python/"${PY_VER}"/bin/pip wheel . -w ./dist --no-deps
