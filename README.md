@@ -1,0 +1,1 @@
+Test for python setup.py for pure C++ projects.
