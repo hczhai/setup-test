@@ -27,7 +27,7 @@ jobs:
           - os: macos-latest
             parallel: mpi
           - os: ubuntu-latest
-            parallel: 3.9
+            python: 3.9
       fail-fast: false
 
     steps:
