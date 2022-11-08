@@ -122,16 +122,16 @@ from distutils.command.build import build
 build.sub_commands = ([c for c in build.sub_commands if c[0] == 'build_ext'] +
                       [c for c in build.sub_commands if c[0] != 'build_ext'])
 
-setup(name='stt',
+setup(name='sttxx',
     version='0.1',
     packages=find_packages(),
-    ext_modules=[CMakeExt('stt')],
+    ext_modules=[CMakeExt('sttxx')],
     cmdclass={'build_ext': CMakeBuild, 'build_scripts': BinBuild},
     license='LICENSE',
-    description="stt test",
+    description="sttxx test",
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     author='Unknown',
-    scripts=["stt"],
+    scripts=["sttxx"],
     install_requires=[]
 )
