@@ -107,10 +107,9 @@ jobs:
 
       - name: build index
         env:
-          REPO_URL: ${{ github.server_url }}/${{ github.repository }}
-          TAG_STRING: ${{ github.event.ref }}
+          REPO: ${{ github.repository }}
         run: |
-          python .github/workflows/build_pip_index.py ${REPO_URL} ${TAG_STRING:10} ./idx-dist
+          python .github/workflows/build_pip_index.py ${REPO} ./idx-dist/pypi
 
       - name: setup pages
         uses: actions/configure-pages@v2

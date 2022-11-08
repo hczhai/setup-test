@@ -1,20 +1,42 @@
 
-import sys, os
+import sys, os, json
+from urllib.request import urlopen
 
 REPO_URL = sys.argv[1]
-TAG = sys.argv[2]
-DIST = sys.argv[3]
+DIST = sys.argv[2]
+
+data = {}
+
+main_url = "https://api.github.com/repos/%s/releases" % REPO_URL
+
+for d in json.loads(urlopen(main_url).read()):
+    for dd in json.loads(urlopen(d["assets_url"]).read()):
+        name = dd["name"]
+        download_url = dd["browser_download_url"]
+        package_name = name.split("-")[0]
+        if package_name not in data:
+            data[package_name] = {}
+        data[package_name][name] = download_url
 
 page = """<!DOCTYPE html>
 <html>
   <body>
-    <a href="test/">test</a><br/>
+%s
   </body>
 </html>
 """
 
 if not os.path.exists(DIST):
-    os.mkdir(DIST)
+    os.makedirs(DIST)
 
 with open(DIST + "/index.html", "w") as f:
-    f.write(page)
+    cont = "\n".join("    <a href=\"%s/\">%s</a><br/>" % (x, x) for x in data)
+    f.write(page % cont)
+
+for k, v in sorted(data.items()):
+    if not os.path.exists(DIST + "/" + k):
+        os.makedirs(DIST + "/" + k)
+    with open(DIST + "/" + k + "/index.html", "w") as f:
+        cont = "    <h1>Links for %s</h1>\n" % k
+        cont += "\n".join("    <a href=\"%s\">%s</a><br/>" % (y, x) for x, y in sorted(v.items()))
+        f.write(page % cont)
